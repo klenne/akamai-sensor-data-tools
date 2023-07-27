@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/akamai-sensor-data-tools/static/css/main.b221bd29.css",
-    "main.js": "/akamai-sensor-data-tools/static/js/main.f99be590.js",
-    "index.html": "/akamai-sensor-data-tools/index.html",
-    "main.b221bd29.css.map": "/akamai-sensor-data-tools/static/css/main.b221bd29.css.map",
-    "main.f99be590.js.map": "/akamai-sensor-data-tools/static/js/main.f99be590.js.map"
+    "main.css": "/static/css/main.b221bd29.css",
+    "main.js": "/static/js/main.5b432445.js",
+    "index.html": "/index.html",
+    "main.b221bd29.css.map": "/static/css/main.b221bd29.css.map",
+    "main.5b432445.js.map": "/static/js/main.5b432445.js.map"
   },
   "entrypoints": [
     "static/css/main.b221bd29.css",
-    "static/js/main.f99be590.js"
+    "static/js/main.5b432445.js"
   ]
 }
