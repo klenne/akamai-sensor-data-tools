@@ -2,6 +2,7 @@
   "name": "sensor-data-tools",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://www.abck.tools/",
   "dependencies": {
     "@babel/generator": "^7.22.9",
     "@babel/parser": "^7.22.7",
@@ -44,7 +45,9 @@
     "start": "react-app-rewired --openssl-legacy-provider start",
     "build": "react-app-rewired --openssl-legacy-provider build",
     "test": "react-app-rewired test",
-    "eject": "react-app-rewired eject"
+    "eject": "react-app-rewired eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -68,6 +71,7 @@
     "@babel/preset-env": "^7.22.9",
     "@types/react": "^17.0.62",
     "@types/react-dom": "^18.2.7",
-    "@types/uuid": "^9.0.2"
+    "@types/uuid": "^9.0.2",
+    "gh-pages": "^5.0.0"
   }
 }
