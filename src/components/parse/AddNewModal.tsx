@@ -53,7 +53,7 @@ export default function AddNewModal(props: AddNewModalProps) {
     <Dialog
       open={props.state}
       onClose={handleClose}
-      PaperProps={{ style: { backgroundColor: theme.palette.background.paper } }}
+      PaperProps={{ style: { backgroundColor: theme.palette.background.default } }}
     >
       <Formik initialValues={formik.initialValues} onSubmit={formik.handleSubmit as any}>
         <Form>
