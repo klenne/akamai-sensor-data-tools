@@ -55,7 +55,7 @@ export default function AddNewModal(props: AddNewModalProps) {
       onClose={handleClose}
       PaperProps={{ style: { backgroundColor: theme.palette.background.paper } }}
     >
-      <Formik initialValues={formik.initialValues} onSubmit={formik.handleSubmit}>
+      <Formik initialValues={formik.initialValues} onSubmit={formik.handleSubmit as any}>
         <Form>
           <DialogTitle>Decode Payload</DialogTitle>
           <DialogContent>

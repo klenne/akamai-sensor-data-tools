@@ -18,7 +18,7 @@ import {
   MenuItem,
   Select,
   Typography,
-} from "@material-ui/core";
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { SensorResponse } from "../../service";
 import { copyToClipboard } from "../../util/copyToClipboard";

@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
-import { ThemeProvider } from "@material-ui/core";
+import { ThemeProvider } from "@mui/material";
 import theme from "./theme/main-theme";
 import IndexedDBProvider from "./provider/db/IndexedDBProvider";
 

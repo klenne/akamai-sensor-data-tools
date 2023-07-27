@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Card, CardContent, CardHeader, IconButton, Typography } from "@material-ui/core";
+import { Card, CardContent, CardHeader, IconButton, Typography } from "@mui/material";
 import TreeView from "@mui/lab/TreeView";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";

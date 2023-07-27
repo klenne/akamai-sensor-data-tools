@@ -6,7 +6,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { PayloadResponse } from "./PayloadResponse";
 import theme from "../../theme/main-theme";
-import { List, ListItem, ListItemText } from "@material-ui/core";
+import { List, ListItem, ListItemText } from "@mui/material";
 import { copyToClipboard } from "../../util/copyToClipboard";
 
 interface PayloadExpandedModalProps {

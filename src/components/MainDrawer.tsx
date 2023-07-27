@@ -1,6 +1,14 @@
 import * as React from "react";
 import Drawer from "@mui/material/Drawer";
-import { Box,List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
+import {
+  Box,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { mainMenuProvider } from "../provider/mainMenuProvider";
 import { ListItemButton } from "@mui/material";
 import theme from "../theme/main-theme";
@@ -11,6 +19,8 @@ interface mainDrawerProps {
   setDrawerState: (state: boolean) => void;
 }
 export const MainDrawer = (props: mainDrawerProps) => {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
     if (
       event.type === "keydown" &&
@@ -26,7 +36,11 @@ export const MainDrawer = (props: mainDrawerProps) => {
   return (
     <Drawer anchor="left" open={props.state} onClose={toggleDrawer(false)}>
       <Box
-        style={{ backgroundColor: theme.palette.background.default, height: "100%" }}
+        style={{
+          backgroundColor: theme.palette.background.default,
+          height: "100%",
+          width: isSmallScreen ? "60vw" : "21vw",
+        }}
         sx={{ width: 250 }}
         role="presentation"
         onClick={toggleDrawer(false)}

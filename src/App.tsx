@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import theme from "./theme/main-theme";
-import { Grid, makeStyles } from "@material-ui/core";
+import makeStyles from "@mui/styles/makeStyles";
 import { MainAppBar, MainDrawer, MainFooter } from "./components";
-import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
-import { MainPage } from "./pages";
-import { ParsePayloadPage } from "./pages/ParsePayloadPage";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { MainPage, DeobfuscatePage, ParsePayloadPage } from "./pages";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Theme } from "@mui/material/styles";
 
-
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   app: {
     overflow: "hidden",
     backgroundColor: theme.palette.background.default,
@@ -33,9 +32,9 @@ function App() {
           <MainAppBar state={drawerState} setDrawerState={setDrawerState} />
           <Routes>
             <Route path="/" element={<MainPage />} />
-            <Route path="/payload-info" element={<h1>...</h1>} />
+            <Route path="/payload-info" element={<h1>Building...</h1>} />
             <Route path="/parse-payload" element={<ParsePayloadPage />} />
-            <Route path="/deobfuscate-script" element={<h1>...</h1>} />
+            <Route path="/deobfuscate-script" element={<DeobfuscatePage />} />
           </Routes>
         </div>
         <ToastContainer
