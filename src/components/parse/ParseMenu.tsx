@@ -50,6 +50,7 @@ export const ParseMenu = (props: ParseMenuProps) => {
         }}
       >
         <MenuItem
+          style={{ color: theme.palette.text.secondary }}
           onClick={() => {
             props.addNewModalState(true);
             handleClose();
@@ -58,6 +59,7 @@ export const ParseMenu = (props: ParseMenuProps) => {
           Decode New
         </MenuItem>
         <MenuItem
+          style={{ color: theme.palette.text.secondary }}
           onClick={() => {
             props.compareState(true);
             handleClose();
