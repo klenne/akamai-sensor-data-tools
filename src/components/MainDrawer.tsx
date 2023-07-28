@@ -48,7 +48,7 @@ export const MainDrawer = (props: mainDrawerProps) => {
         <List>
           {mainMenuProvider.map((menuItem, index) => (
             <Link to={menuItem.path} key={index}>
-              <ListItem disableGutters divider={index == mainMenuProvider.length - 1}>
+              <ListItem disableGutters divider={index === mainMenuProvider.length - 1}>
                 <ListItemButton>
                   <ListItemIcon>
                     {<menuItem.icon style={{ color: theme.palette.text.primary }} />}
