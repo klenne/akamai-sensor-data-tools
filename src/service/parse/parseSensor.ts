@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { getSeperator, isJSON, isBool, RawSensorJson } from "./utils";
 import { secondDec, firstDec } from "./dec";
 import { v4 as uuidv4 } from "uuid";
@@ -6,7 +7,7 @@ interface Divider {
   identifier: string;
   endIdentifier?: string;
   name: string;
-  reverse?: boolean; // incase data is behind the divider - necessary for first children
+  reverse?: boolean; 
   children?: Divider[];
   last?: boolean;
   new?: boolean;

@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import { mainMenuProvider } from "../provider/mainMenuProvider";
 import { ListItemButton } from "@mui/material";
-import theme from "../theme/main-theme";
 import { Link } from "react-router-dom";
 
 interface mainDrawerProps {
