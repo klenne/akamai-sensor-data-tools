@@ -1,6 +1,6 @@
 // @ts-nocheck
 /* eslint-disable */
-function adjustEnvironment() {
+export function adjustEnvironment (){
   Object.defineProperty(window.frameElement.contentDocument, "currentScript", {
     get: function () {
       return window.currentSpt;
@@ -1283,4 +1283,3 @@ function adjustEnvironment() {
   window.localStorage.clear();
 }
 
-export default adjustEnvironment;
