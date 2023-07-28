@@ -1,6 +1,6 @@
 // @ts-nocheck
 /* eslint-disable */
-export function adjustEnvironment() {
+function adjustEnvironment() {
   Object.defineProperty(window.frameElement.contentDocument, "currentScript", {
     get: function () {
       return window.currentSpt;
