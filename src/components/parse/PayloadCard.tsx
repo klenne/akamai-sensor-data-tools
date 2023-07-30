@@ -6,7 +6,6 @@ import {
   IconButton,
   Typography,
   useMediaQuery,
-  useTheme,
 } from "@mui/material";
 import TreeView from "@mui/lab/TreeView";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";

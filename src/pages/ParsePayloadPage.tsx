@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ParseHeader, PayloadCard } from "../components";
 import AddNewModal from "../components/parse/AddNewModal";
 import { PayloadResponse } from "../components/parse/PayloadResponse";
-import { Grid, Typography, useTheme } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import PayloadExpandedModal from "../components/parse/PayloadExpandedModal";
 import IndexedDBProvider from "../provider/db/IndexedDBProvider";
 import { Loading } from "../components/loading";
