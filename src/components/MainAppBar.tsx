@@ -21,16 +21,16 @@ export const MainAppBar = (props: MainAppBarProps) => {
             edge="start"
             color="inherit"
             aria-label="menu"
-            sx={{ mr: 2 }}
+            sx={{ mr: 2, }}
             onClick={() => {
               props.setDrawerState(!props.state);
             }}
           >
-            <MenuIcon />
+            <MenuIcon sx={{fontSize:{xs:"2rem", }}} />
           </IconButton>
           <Link to="/" >
             <Typography
-              variant="h6"
+              variant="h4"
               component="div"
               color={theme.palette.text.primary}
               sx={{ flexGrow: 1 }}

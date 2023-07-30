@@ -52,7 +52,7 @@ export const MainFooter = () => {
         <Link
           target="_blank"
           href="https://github.com/klenne"
-          sx={{ color: theme.palette.text.primary, flexGrow: 0, marginLeft: ".2rem" }}
+          sx={{ color: theme.palette.text.primary, flexGrow: 0, marginLeft: ".2rem", display:"flex", alignItems:"center" }}
         >
           <GitHubIcon sx={{ "&:hover": { color: theme.palette.text.secondary } }}></GitHubIcon>
         </Link>

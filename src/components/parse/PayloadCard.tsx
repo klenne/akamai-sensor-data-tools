@@ -1,5 +1,13 @@
 import * as React from "react";
-import { Card, CardContent, CardHeader, IconButton, Typography } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  IconButton,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import TreeView from "@mui/lab/TreeView";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
@@ -16,6 +24,8 @@ interface PayloadCardProps {
   onSelect: (payload: PayloadResponse) => void;
 }
 export const PayloadCard = (props: PayloadCardProps) => {
+  const isLgScreen = useMediaQuery(theme.breakpoints.up("lg"));
+
   return (
     <Card
       elevation={2}
@@ -33,7 +43,10 @@ export const PayloadCard = (props: PayloadCardProps) => {
               }}
             >
               <OpenInFullIcon
-                style={{ color: theme.palette.secondary.main, fontSize: "1rem" }}
+                style={{
+                  color: theme.palette.secondary.main,
+                  fontSize: isLgScreen ? "2rem" : "1rem",
+                }}
                 aria-label="view"
               />
             </IconButton>
@@ -44,7 +57,10 @@ export const PayloadCard = (props: PayloadCardProps) => {
               }}
             >
               <DeleteIcon
-                style={{ color: theme.palette.primary.main, fontSize: "1rem" }}
+                style={{
+                  color: theme.palette.primary.main,
+                  fontSize: isLgScreen ? "2rem" : "1rem",
+                }}
                 aria-label="Delete"
               />
             </IconButton>
@@ -56,7 +72,7 @@ export const PayloadCard = (props: PayloadCardProps) => {
           aria-label="file system navigator"
           defaultCollapseIcon={<ExpandMoreIcon />}
           defaultExpandIcon={<ChevronRightIcon />}
-          sx={{ flexGrow: 1, overflowX: "hidden", maxHeight: "200px" }}
+          sx={{ flexGrow: 1, overflowX: "hidden", maxHeight: isLgScreen ? "500px" : "200px" }}
         >
           {props.payload.encodingKey ? (
             <TreeItem

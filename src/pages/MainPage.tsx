@@ -3,9 +3,9 @@ import { Typography, Container, Box } from "@mui/material";
 
 export const MainPage = () => {
   return (
-    <Container>
+    <Container style={{width:"100%"}}>
       <Box mt={1}>
-        <Typography variant="h6" gutterBottom>
+        <Typography variant="h6" gutterBottom  >
           Akamai Anti-Bot
         </Typography>
         <Typography variant="body2" paragraph gutterBottom align="justify">

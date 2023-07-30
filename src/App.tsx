@@ -16,8 +16,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    fontSize: "calc(8px + 2vmin)",
+    // fontSize: "calc(8px + 2vmin)",
     color: "white",
+  
   },
 }));
 

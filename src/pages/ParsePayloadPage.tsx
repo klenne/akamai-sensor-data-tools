@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ParseHeader, PayloadCard } from "../components";
 import AddNewModal from "../components/parse/AddNewModal";
 import { PayloadResponse } from "../components/parse/PayloadResponse";
-import { Grid, Typography } from "@mui/material";
+import { Grid, Typography, useTheme } from "@mui/material";
 import PayloadExpandedModal from "../components/parse/PayloadExpandedModal";
 import IndexedDBProvider from "../provider/db/IndexedDBProvider";
 import { Loading } from "../components/loading";
@@ -73,11 +73,12 @@ export const ParsePayloadPage = () => {
           justifyContent="center"
           alignItems="center"
           spacing={1}
+          style={{padding:"1rem"}}
         >
           {payloadsView.length > 0 ? (
             payloadsView.map((payload) => {
               return (
-                <Grid item md={4} xs={12} key={payload.id}>
+                <Grid item md={4} lg={6} xs={12} key={payload.id}>
                   <PayloadCard
                     onDelete={(payload) => {
                       IndexedDBProvider.deleteDataById(payload.id).then(() => {
