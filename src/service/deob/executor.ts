@@ -141,7 +141,7 @@ const execute = (code, configs) => {
 
   iframe.contentWindow?.eval(`
     ${adjustEnvironment.toString()}
-
+debugger;
     try{ adjustEnvironment(); } catch(err){ console.log("error in environment",err) }
 
     ${appendMethods.toString()}
