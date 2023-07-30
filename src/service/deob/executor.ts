@@ -138,11 +138,9 @@ const execute = (code, configs) => {
       return null;
     });
   }
-
+  let environment = adjustEnvironment();
   iframe.contentWindow?.eval(`
-    ${adjustEnvironment.toString()}
-debugger;
-    try{ adjustEnvironment(); } catch(err){ console.log("error in environment",err) }
+    try{ ${environment} } catch(err){ console.log("error in environment",err) }
 
     ${appendMethods.toString()}
     try{${script}}catch(er){debugger;}
@@ -192,9 +190,8 @@ const thirdRun = (code) => {
 
 const fourthRun = (code) => {
   execute(code, {
-    scriptUrl: new URL(
-      "https://accounts.nike.com/l/wRn__-sWMrwfs/aEJ9tbYaVi/QV4AAQ/GXcvHxc/4N28"
-    ).pathname,
+    scriptUrl: new URL("https://accounts.nike.com/l/wRn__-sWMrwfs/aEJ9tbYaVi/QV4AAQ/GXcvHxc/4N28")
+      .pathname,
     moreMethods: true,
     documentUrl: "https://accounts.nike.com",
     browser: {},
