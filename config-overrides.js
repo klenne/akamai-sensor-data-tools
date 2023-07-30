@@ -14,6 +14,7 @@ module.exports = function override(config) {
                 new TerserPlugin({
                     terserOptions: {
                         keep_fnames: true,
+                        mangle: false, 
                     },
                 }),
             ],
