@@ -27,13 +27,13 @@ export interface SensorResponse {
 }
 const dividers: Divider[] = [
   { identifier: "-100", name: "deviceData" },
-  { identifier: "-105", name: "informinfo" },
+  { identifier: "-105", name: "informinfo 1" },
   { identifier: "-108", name: "bmak.kact" },
   { identifier: "-101", name: "windowEvents" },
   { identifier: "-110", name: "bmak.mact" },
   { identifier: "-117", name: "bmak.tact" },
   { identifier: "-109", name: "bmak.dmact" },
-  { identifier: "-102", name: "informinfo" },
+  { identifier: "-102", name: "informinfo 2" },
   { identifier: "-111", name: "bmak.doact" },
   { identifier: "-114", name: "bmak.pact" },
   { identifier: "-103", name: "bmak.vcact" },
