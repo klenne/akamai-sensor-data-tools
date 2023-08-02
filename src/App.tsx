@@ -16,10 +16,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    // fontSize: "calc(8px + 2vmin)",
-    color: "white",
-  
+
   },
+  toastBody:{
+    fontSize:"1rem",
+    fontFamily:"Roboto"
+  }
 }));
 
 function App() {
@@ -49,6 +51,7 @@ function App() {
           draggable
           pauseOnHover
           theme="dark"
+          bodyClassName={classes.toastBody}
         />
         <MainFooter />
       </div>

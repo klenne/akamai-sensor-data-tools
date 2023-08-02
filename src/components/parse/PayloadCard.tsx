@@ -44,7 +44,7 @@ export const PayloadCard = (props: PayloadCardProps) => {
               <OpenInFullIcon
                 style={{
                   color: theme.palette.secondary.main,
-                  fontSize: isLgScreen ? "2rem" : "1rem",
+                  fontSize: isLgScreen ? "1.7rem" : "1rem",
                 }}
                 aria-label="view"
               />
@@ -58,7 +58,7 @@ export const PayloadCard = (props: PayloadCardProps) => {
               <DeleteIcon
                 style={{
                   color: theme.palette.primary.main,
-                  fontSize: isLgScreen ? "2rem" : "1rem",
+                  fontSize: isLgScreen ? "1.7rem" : "1rem",
                 }}
                 aria-label="Delete"
               />

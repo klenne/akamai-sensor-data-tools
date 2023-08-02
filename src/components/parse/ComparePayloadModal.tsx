@@ -118,6 +118,7 @@ export default function ComparePayloadModal(props: ComparePayloadModalModalProps
               props.payloads.find((x) => x.id === (event?.target?.value as any)) as PayloadResponse
             );
           }}
+          label={label}
         >
           {props.payloads.map((item) => (
             <MenuItem
@@ -144,13 +145,12 @@ export default function ComparePayloadModal(props: ComparePayloadModalModalProps
         style={{ backgroundColor: theme.palette.background.default, flexGrow: 1 }}
       >
         <CardContent>
-          <Typography variant="h6" style={{ fontSize: ".7rem", fontWeight: "800" }}>
+          <Typography variant="h6">
             {typeof obj !== "string" ? obj.name : "Encoding Key"}
           </Typography>
           <Typography
             variant="body2"
             style={{
-              fontSize: "0.7rem",
               wordWrap: "break-word",
               wordBreak: "break-all",
               cursor: "pointer",
@@ -188,7 +188,7 @@ export default function ComparePayloadModal(props: ComparePayloadModalModalProps
           <Grid xs={6} item>
             {selector("Select second payload", selectedPayload2, setSelectedPayload2)}
           </Grid>
-          <Grid container spacing={1}>
+          <Grid container spacing={1} style={{ marginTop: "1rem" }}>
             {selectedPayload1 &&
             selectedPayload2 &&
             selectedPayload1.encodingKey !== selectedPayload2.encodingKey ? (

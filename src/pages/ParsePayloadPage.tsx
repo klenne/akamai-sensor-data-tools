@@ -70,7 +70,7 @@ export const ParsePayloadPage = () => {
           item
           container
           direction="row"
-          justifyContent="center"
+          justifyContent="flex-start"
           alignItems="center"
           spacing={1}
           style={{padding:"1rem"}}
