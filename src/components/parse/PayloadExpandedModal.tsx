@@ -41,7 +41,8 @@ export default function PayloadExpandedModal(props: PayloadExpandedModalProps) {
                 primary="Encoding Key"
                 secondaryTypographyProps={{ style: { color: theme.palette.text.primary } }}
                 secondary={props.payload.encodingKey}
-                onClick={() => {
+                onContextMenu={(e) => {
+                  e.preventDefault();
                   copyToClipboard(props.payload.encodingKey);
                 }}
               />
@@ -61,7 +62,8 @@ export default function PayloadExpandedModal(props: PayloadExpandedModalProps) {
                 primary={item.name}
                 secondaryTypographyProps={{ style: { color: theme.palette.text.primary } }}
                 secondary={item.value}
-                onClick={() => {
+                onContextMenu={(e) => {
+                  e.preventDefault();
                   copyToClipboard(item.value);
                 }}
               />

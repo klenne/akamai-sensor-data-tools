@@ -125,7 +125,7 @@ const executeDeob = (code, setResponse, setFinalResult) => {
     );
     loop++;
     if (loop > 10) {
-      setResponse("Something got stuck during script execution; please click somewhere...");
+      window.postS++;
     } else if (instruction) {
       setResponse(instruction.message);
     }

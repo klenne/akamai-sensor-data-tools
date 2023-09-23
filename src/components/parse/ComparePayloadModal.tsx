@@ -139,7 +139,8 @@ export default function ComparePayloadModal(props: ComparePayloadModalModalProps
   const card = (obj: SensorResponse | string) => (
     <Grid xs={6} item container>
       <Card
-        onClick={() => {
+        onContextMenu={(e) => {
+          e.preventDefault();
           copyToClipboard(typeof obj !== "string" ? obj.value : obj);
         }}
         style={{ backgroundColor: theme.palette.background.default, flexGrow: 1 }}

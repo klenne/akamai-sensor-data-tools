@@ -80,7 +80,8 @@ export const PayloadCard = (props: PayloadCardProps) => {
               label="Encoding Key"
             >
               <div
-                onClick={() => {
+                onContextMenu={(e) => {
+                  e.preventDefault();
                   copyToClipboard(props.payload.encodingKey);
                 }}
               >
@@ -100,7 +101,8 @@ export const PayloadCard = (props: PayloadCardProps) => {
               label={parsed.name}
             >
               <div
-                onClick={() => {
+                onContextMenu={(e) => {
+                  e.preventDefault();
                   copyToClipboard(parsed.value);
                 }}
               >
