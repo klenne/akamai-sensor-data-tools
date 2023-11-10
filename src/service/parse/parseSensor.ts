@@ -182,6 +182,9 @@ export const ParseNewSensor = (sensor: string, detailed: boolean): ParsedSensorR
       const values = recursiveSplitByDivider(clean, detailed, d, seperator);
       if (values != null) {
         let val = Object.getOwnPropertyNames(values);
+        if(val[0] == "bunch of stuff"){
+          parsedSensor.unshift({ id: uuidv4(), name: `_abck`, value: values[`${val[0]}`].split(",")[20] });
+        }
         parsedSensor.push({ id: uuidv4(), name: `${val[0]}`, value: values[`${val[0]}`] });
       }
     });

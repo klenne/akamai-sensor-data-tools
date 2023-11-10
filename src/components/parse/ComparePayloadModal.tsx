@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import * as React from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -9,8 +10,6 @@ import theme from "../../theme/main-theme";
 import { v4 as uuidv4 } from "uuid";
 
 import {
-  Card,
-  CardContent,
   Divider,
   FormControl,
   Grid,
@@ -21,7 +20,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { SensorResponse } from "../../service";
-import { copyToClipboard } from "../../util/copyToClipboard";
+import CompareCard from "./CompareCard";
 
 interface ComparePayloadModalModalProps {
   state: boolean;
@@ -35,10 +34,20 @@ export default function ComparePayloadModal(props: ComparePayloadModalModalProps
   interface ObjectComparable {
     object1: SensorResponse;
     object2: SensorResponse;
+    splited: boolean;
+    id: string;
   }
   const [commonObjects, setCommonObjects] = useState([] as ObjectComparable[]);
   const [differentObjects, setDifferentObjects] = useState([] as ObjectComparable[]);
-
+  const semiColonEmtries = [
+    "bmak.mact",
+    "bmak.dmact",
+    "bmak.doact",
+    "bmak.vcact",
+    "bmak.fpcf.fpValStr",
+    "bmak.kact",
+    "bmak.pact",
+  ];
   useEffect(() => {
     setSelectedPayload1(null);
     setSelectedPayload2(null);
@@ -72,7 +81,12 @@ export default function ComparePayloadModal(props: ComparePayloadModalModalProps
           if (keys2.includes(key) && obj1[key].name === obj2[key].name) {
             if (obj1[key].value !== obj2[key].value) {
               if (!diffObj.find((x) => x.object1.id === obj1[key].id)) {
-                diffObj.push({ object1: obj1[key], object2: obj2[key] } as ObjectComparable);
+                diffObj.push({
+                  object1: obj1[key],
+                  object2: obj2[key],
+                  id: uuidv4(),
+                  splited: false,
+                } as ObjectComparable);
               }
             }
           } else {
@@ -136,34 +150,6 @@ export default function ComparePayloadModal(props: ComparePayloadModalModalProps
     );
   };
 
-  const card = (obj: SensorResponse | string) => (
-    <Grid xs={6} item container>
-      <Card
-        onContextMenu={(e) => {
-          e.preventDefault();
-          copyToClipboard(typeof obj !== "string" ? obj.value : obj);
-        }}
-        style={{ backgroundColor: theme.palette.background.default, flexGrow: 1 }}
-      >
-        <CardContent>
-          <Typography variant="h6">
-            {typeof obj !== "string" ? obj.name : "Encoding Key"}
-          </Typography>
-          <Typography
-            variant="body2"
-            style={{
-              wordWrap: "break-word",
-              wordBreak: "break-all",
-              cursor: "pointer",
-            }}
-          >
-            {typeof obj !== "string" ? obj.value : obj}
-          </Typography>
-        </CardContent>
-      </Card>
-    </Grid>
-  );
-
   const heading = (text: string) => (
     <Grid item xs={12} container direction="column" alignItems="flex-start">
       <Typography variant="h6" gutterBottom style={{ color: theme.palette.text.primary }}>
@@ -173,6 +159,15 @@ export default function ComparePayloadModal(props: ComparePayloadModalModalProps
     </Grid>
   );
 
+  const changeSplited = (item: ObjectComparable) => {
+    const tempDifff = [...differentObjects];
+    const findIndex = tempDifff.findIndex((obj) => {
+      return item.id === obj.id;
+    });
+
+    tempDifff[findIndex].splited = !tempDifff[findIndex].splited;
+    setDifferentObjects(tempDifff);
+  };
   return (
     <Dialog
       fullScreen
@@ -196,8 +191,8 @@ export default function ComparePayloadModal(props: ComparePayloadModalModalProps
               <>
                 {heading("Encoding Key")}
                 <Grid container spacing={1} item xs={12}>
-                  {card(selectedPayload1.encodingKey)}
-                  {card(selectedPayload2.encodingKey)}
+                  <CompareCard encodingKey={selectedPayload1.encodingKey} />
+                  <CompareCard encodingKey={selectedPayload2.encodingKey} />
                 </Grid>
               </>
             ) : (
@@ -206,15 +201,29 @@ export default function ComparePayloadModal(props: ComparePayloadModalModalProps
             {differentObjects?.length > 0 && heading("Different values")}
             {differentObjects.map((item: ObjectComparable) => (
               <Grid key={uuidv4()} container spacing={1} item xs={12}>
-                {card(item.object1)}
-                {card(item.object2)}
+                <CompareCard
+                  obj={item.object1}
+                  onClickSplitDesplit={() => {
+                    changeSplited(item);
+                  }}
+                  splited={item.splited}
+                  splitSymbol={semiColonEmtries.includes(item.object1.name) ? ";" : ","}
+                />
+                <CompareCard
+                  obj={item.object2}
+                  onClickSplitDesplit={() => {
+                    changeSplited(item);
+                  }}
+                  splitSymbol={semiColonEmtries.includes(item.object2.name) ? ";" : ","}
+                  splited={item.splited}
+                />
               </Grid>
             ))}
             {commonObjects?.length > 0 && heading("Equal values")}
             {commonObjects.map((item: ObjectComparable) => (
               <Grid key={uuidv4()} container spacing={1} item xs={12}>
-                {card(item.object1)}
-                {card(item.object2)}
+                <CompareCard disableSplit obj={item.object1} />
+                <CompareCard disableSplit obj={item.object2} />
               </Grid>
             ))}
           </Grid>

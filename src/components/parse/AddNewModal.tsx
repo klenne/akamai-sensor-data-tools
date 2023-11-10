@@ -36,6 +36,7 @@ export default function AddNewModal(props: AddNewModalProps) {
           identifier: values.identifier,
           encodingKey: parsedSensor.encodingKey,
           parsed: parsedSensor.sensor,
+          date:new Date()
         });
         handleClose();
       } catch {

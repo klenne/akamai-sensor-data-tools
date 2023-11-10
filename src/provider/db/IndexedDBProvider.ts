@@ -66,7 +66,9 @@ class IndexedDBProvider {
 
       const request = store.getAll();
       request.onsuccess = (event: Event) => {
-        resolve((event.target as IDBRequest<PayloadResponse[]>).result);
+        resolve(
+          (event.target as IDBRequest<PayloadResponse[]>).result
+        );
       };
 
       request.onerror = (event: Event) => {

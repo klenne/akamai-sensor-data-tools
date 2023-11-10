@@ -3,6 +3,7 @@ import {
   Card,
   CardContent,
   CardHeader,
+  Grid,
   IconButton,
   Typography,
   useMediaQuery,
@@ -32,7 +33,18 @@ export const PayloadCard = (props: PayloadCardProps) => {
     >
       <CardHeader
         color={theme.palette.text.secondary}
-        title={props.payload.identifier}
+        title={
+          <Grid container direction="column" justifyContent="flex-start" wrap="wrap">
+            <Typography>{props.payload.identifier}</Typography>
+            <Typography variant="body2" style={{ fontSize: ".5rem" }}>
+              {`Parset at ${props.payload.date
+                .toISOString()
+                .slice(0, 19)
+                .replace(/-/g, "/")
+                .replace("T", " ")}`}
+            </Typography>
+          </Grid>
+        }
         action={
           <>
             <IconButton

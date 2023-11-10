@@ -5,4 +5,5 @@ export interface PayloadResponse {
   identifier: string;
   parsed: SensorResponse[];
   encodingKey: string;
+  date:Date;
 }

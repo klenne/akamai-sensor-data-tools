@@ -32,10 +32,13 @@ export const ParsePayloadPage = () => {
   }, []);
 
   useEffect(() => {
+    const payloadsSorted = payloads.sort((a, b) => {
+      return  new Date(b.date).valueOf()  - new Date(a.date).valueOf();
+    });
     if (search.length > 0) {
-      setPayloadsView(payloads.filter((x) => x.identifier.includes(search)));
+      setPayloadsView(payloadsSorted.filter((x) => x.identifier.includes(search)));
     } else {
-      setPayloadsView(payloads);
+      setPayloadsView(payloadsSorted);
     }
   }, [payloads, search]);
 
@@ -73,7 +76,7 @@ export const ParsePayloadPage = () => {
           justifyContent="flex-start"
           alignItems="center"
           spacing={1}
-          style={{padding:"1rem"}}
+          style={{ padding: "1rem" }}
         >
           {payloadsView.length > 0 ? (
             payloadsView.map((payload) => {
