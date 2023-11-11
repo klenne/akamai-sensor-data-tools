@@ -33,7 +33,7 @@ export const ParsePayloadPage = () => {
 
   useEffect(() => {
     const payloadsSorted = payloads.sort((a, b) => {
-      return  new Date(b.date).valueOf()  - new Date(a.date).valueOf();
+      return new Date(b.date).valueOf() - new Date(a.date).valueOf();
     });
     if (search.length > 0) {
       setPayloadsView(payloadsSorted.filter((x) => x.identifier.includes(search)));
@@ -66,6 +66,9 @@ export const ParsePayloadPage = () => {
             setSearch={setSearch}
             addNewModalState={setModalState}
             compareState={setCompareState}
+            removeCallback={() => {
+              setPayloads([]);
+            }}
           />
         </Grid>
         <Grid

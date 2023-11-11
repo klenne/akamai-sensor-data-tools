@@ -119,6 +119,26 @@ class IndexedDBProvider {
       };
     });
   }
+  async dropDb(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (!this.db) {
+        reject(new Error("Database not initialized."));
+        return;
+      }
+
+      const transaction = this.db.transaction(STORE_NAME, "readwrite");
+      const store = transaction.objectStore(STORE_NAME);
+
+      const request = store.clear()
+      request.onsuccess = () => {
+        resolve();
+      };
+
+      request.onerror = (event: Event) => {
+        reject((event.target as IDBRequest).error);
+      };
+    });
+  }
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export

@@ -4,12 +4,15 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import theme from "../../theme/main-theme";
+import IndexedDBProvider from "../../provider/db/IndexedDBProvider";
+import { toast } from "react-toastify";
 
 const ITEM_HEIGHT = 48;
 
 interface ParseMenuProps {
   addNewModalState: (state: boolean) => void;
   compareState: (state: boolean) => void;
+  removeCallback: () => void;
 }
 export const ParseMenu = (props: ParseMenuProps) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -66,6 +69,17 @@ export const ParseMenu = (props: ParseMenuProps) => {
           }}
         >
           Compare
+        </MenuItem>
+        <MenuItem
+          style={{ color: theme.palette.text.secondary }}
+          onClick={() => {
+            IndexedDBProvider.dropDb().then(() => {
+              toast.success("Payloads Cleared");
+              props.removeCallback();
+            });
+          }}
+        >
+          Clear All
         </MenuItem>
       </Menu>
     </div>

@@ -37,11 +37,12 @@ export const PayloadCard = (props: PayloadCardProps) => {
           <Grid container direction="column" justifyContent="flex-start" wrap="wrap">
             <Typography>{props.payload.identifier}</Typography>
             <Typography variant="body2" style={{ fontSize: ".5rem" }}>
-              {`Parset at ${props.payload.date
-                .toISOString()
-                .slice(0, 19)
-                .replace(/-/g, "/")
-                .replace("T", " ")}`}
+              {props.payload.date &&
+                `Parset at ${props.payload.date
+                  .toISOString()
+                  .slice(0, 19)
+                  .replace(/-/g, "/")
+                  .replace("T", " ")}`}
             </Typography>
           </Grid>
         }
