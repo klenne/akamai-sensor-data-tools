@@ -137,7 +137,7 @@ const parseBmSzComps = (sensor: string): number[] => {
   return sensor
     .slice(2)
     .split(";")
-    .slice(0, 2)
+    .slice(1, 3)
     .map((n) => Number(n));
 };
 
@@ -152,7 +152,7 @@ export const ParseNewSensor = (sensor: string, detailed: boolean): ParsedSensorR
 
     const bmSzComps = parseBmSzComps(rawSensor);
 
-    const dirty = rawSensor.split(";").slice(4).join(";");
+    const dirty = rawSensor.split(";").slice(5).join(";");
 
     const halfClean = firstDec(dirty, bmSzComps[0]);
 
