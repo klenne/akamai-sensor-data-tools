@@ -7,7 +7,7 @@ interface Divider {
   identifier: string;
   endIdentifier?: string;
   name: string;
-  reverse?: boolean; 
+  reverse?: boolean;
   children?: Divider[];
   last?: boolean;
   new?: boolean;
@@ -132,8 +132,15 @@ function recursiveSplitByDivider(
 
   return finalParsedSensor;
 }
-
 const parseBmSzComps = (sensor: string): number[] => {
+  return sensor
+    .slice(2)
+    .split(";")
+    .slice(0, 2)
+    .map((n) => Number(n));
+};
+
+const parseBmSzComps2 = (sensor: string): number[] => {
   return sensor
     .slice(2)
     .split(";")
@@ -150,9 +157,17 @@ export const ParseNewSensor = (sensor: string, detailed: boolean): ParsedSensorR
       rawSensor = (jsonCheck as RawSensorJson).sensor_data;
     }
 
-    const bmSzComps = parseBmSzComps(rawSensor);
+    let bmSzComps = parseBmSzComps(rawSensor);
+    let usingNewFlow = false;
 
-    const dirty = rawSensor.split(";").slice(5).join(";");
+    if (isNaN(bmSzComps[0]) || isNaN(bmSzComps[1])) {
+      bmSzComps = parseBmSzComps2(rawSensor);
+      usingNewFlow = true;
+    }
+
+    const dirty = usingNewFlow
+      ? rawSensor.split(";").slice(5).join(";")
+      : rawSensor.split(";").slice(4).join(";");
 
     const halfClean = firstDec(dirty, bmSzComps[0]);
 
@@ -182,8 +197,12 @@ export const ParseNewSensor = (sensor: string, detailed: boolean): ParsedSensorR
       const values = recursiveSplitByDivider(clean, detailed, d, seperator);
       if (values != null) {
         let val = Object.getOwnPropertyNames(values);
-        if(val[0] == "bunch of stuff"){
-          parsedSensor.unshift({ id: uuidv4(), name: `_abck`, value: values[`${val[0]}`].split(",")[20] });
+        if (val[0] == "bunch of stuff") {
+          parsedSensor.unshift({
+            id: uuidv4(),
+            name: `_abck`,
+            value: values[`${val[0]}`].split(",")[20],
+          });
         }
         parsedSensor.push({ id: uuidv4(), name: `${val[0]}`, value: values[`${val[0]}`] });
       }
