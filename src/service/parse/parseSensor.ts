@@ -156,11 +156,11 @@ export const ParseNewSensor = (sensor: string, detailed: boolean): ParsedSensorR
     if (!isBool(jsonCheck) && "sensor_data" in (jsonCheck as RawSensorJson)) {
       rawSensor = (jsonCheck as RawSensorJson).sensor_data;
     }
-
+debugger;
     let bmSzComps = parseBmSzComps(rawSensor);
     let usingNewFlow = false;
 
-    if (isNaN(bmSzComps[0]) || isNaN(bmSzComps[1])) {
+    if (isNaN(bmSzComps[0]) || isNaN(bmSzComps[1]) || bmSzComps[0] == 0|| bmSzComps[1] == 0) {
       bmSzComps = parseBmSzComps2(rawSensor);
       usingNewFlow = true;
     }
