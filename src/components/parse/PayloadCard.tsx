@@ -38,7 +38,7 @@ export const PayloadCard = (props: PayloadCardProps) => {
             <Typography>{props.payload.identifier}</Typography>
             <Typography variant="body2" style={{ fontSize: ".5rem" }}>
               {props.payload.date &&
-                `Parset at ${props.payload.date
+                `Parsed at ${props.payload.date
                   .toISOString()
                   .slice(0, 19)
                   .replace(/-/g, "/")
@@ -120,7 +120,7 @@ export const PayloadCard = (props: PayloadCardProps) => {
                 }}
               >
                 <Typography variant="body2" style={{ wordBreak: "break-all", cursor: "copy" }}>
-                  {parsed.value.length > 0 ? parsed.value : "Empty"}
+                  {parsed.value.length > 0 && parsed.value !== "\"\"" ? parsed.value : "Empty"}
                 </Typography>
               </div>
             </TreeItem>

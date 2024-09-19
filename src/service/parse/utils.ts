@@ -1,4 +1,4 @@
-export const getSeperator = (cleanSensor: string): string => {
+export const getSeparator = (cleanSensor: string): string => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore: Object is possibly 'null'.
   return /2([a-zA-Z0-9!@#%&\-_=;:<>,~]+)2\1(?:7a7)/i.exec(cleanSensor)[1];

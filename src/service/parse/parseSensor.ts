@@ -1,6 +1,6 @@
 /* eslint-disable */
-import { getSeperator, isJSON, isBool, RawSensorJson } from "./utils";
-import { secondDec, firstDec } from "./dec";
+import { getSeparator, isJSON, isBool, RawSensorJson } from "./utils";
+import { secondDec, firstDec, firstDecJSON, secondDecJson } from "./dec";
 import { v4 as uuidv4 } from "uuid";
 
 interface Divider {
@@ -156,11 +156,10 @@ export const ParseNewSensor = (sensor: string, detailed: boolean): ParsedSensorR
     if (!isBool(jsonCheck) && "sensor_data" in (jsonCheck as RawSensorJson)) {
       rawSensor = (jsonCheck as RawSensorJson).sensor_data;
     }
-debugger;
     let bmSzComps = parseBmSzComps(rawSensor);
     let usingNewFlow = false;
 
-    if (isNaN(bmSzComps[0]) || isNaN(bmSzComps[1]) || bmSzComps[0] == 0|| bmSzComps[1] == 0) {
+    if (isNaN(bmSzComps[0]) || isNaN(bmSzComps[1]) || bmSzComps[0] == 0 || bmSzComps[1] == 0) {
       bmSzComps = parseBmSzComps2(rawSensor);
       usingNewFlow = true;
     }
@@ -169,44 +168,57 @@ debugger;
       ? rawSensor.split(";").slice(5).join(";")
       : rawSensor.split(";").slice(4).join(";");
 
-    const halfClean = firstDec(dirty, bmSzComps[0]);
-
-    const clean = secondDec(halfClean, bmSzComps[1]);
-
-    const seperator = getSeperator(clean);
-
-    console.log("\n", clean);
-    console.log("\n", JSON.stringify(clean.split(seperator)));
-
+    let halfClean;
+    let clean = "";
     let parsedSensor = [] as SensorResponse[];
-    let dividersCp = [...dividers] as any;
+debugger;
+    if (rawSensor.charAt(0) == "3") {
+      halfClean = firstDecJSON(dirty, bmSzComps[0]);
+      clean = secondDecJson(halfClean, bmSzComps[1]);
+      let parsed = JSON.parse(clean);
+      Object.getOwnPropertyNames(parsed).forEach((prop) => {
+        parsedSensor.push({ id: uuidv4(), name: `${prop}`, value: `${JSON.stringify(parsed[prop])}` });
+      });
+    } else {
+      const halfClean = firstDec(dirty, bmSzComps[0]);
 
-    let match: any;
-    let regex = RegExp(`${seperator}(-\\d{2,3})`, "gm");
-    while ((match = regex.exec(clean)) !== null) {
-      if (match.index === regex.lastIndex) {
-        regex.lastIndex++;
+      const clean = secondDec(halfClean, bmSzComps[1]);
+
+      const separator = getSeparator(clean);
+
+      console.log("\n", clean);
+      console.log("\n", JSON.stringify(clean.split(separator)));
+
+      let dividersCp = [...dividers] as any;
+
+      let match: any;
+      let regex = RegExp(`${separator}(-\\d{2,3})`, "gm");
+      while ((match = regex.exec(clean)) !== null) {
+        if (match.index === regex.lastIndex) {
+          regex.lastIndex++;
+        }
+        console.log(match[1]);
+        if (!dividersCp.find((itemd: Divider) => itemd.identifier == match[1])) {
+          dividersCp.push({ identifier: match[1], name: `New token ${match[1]}`, new: true });
+        }
       }
-      console.log(match[1]);
-      if (!dividersCp.find((itemd: Divider) => itemd.identifier == match[1])) {
-        dividersCp.push({ identifier: match[1], name: `New token ${match[1]}`, new: true });
-      }
+
+      dividersCp.forEach((d: Divider) => {
+        const values = recursiveSplitByDivider(clean, detailed, d, separator);
+        if (values != null) {
+          let val = Object.getOwnPropertyNames(values);
+          if (val[0] == "bunch of stuff") {
+            parsedSensor.unshift({
+              id: uuidv4(),
+              name: `_abck`,
+              value: values[`${val[0]}`].split(",")[20],
+            });
+          }
+          parsedSensor.push({ id: uuidv4(), name: `${val[0]}`, value: values[`${val[0]}`] });
+        }
+      });
     }
 
-    dividersCp.forEach((d: Divider) => {
-      const values = recursiveSplitByDivider(clean, detailed, d, seperator);
-      if (values != null) {
-        let val = Object.getOwnPropertyNames(values);
-        if (val[0] == "bunch of stuff") {
-          parsedSensor.unshift({
-            id: uuidv4(),
-            name: `_abck`,
-            value: values[`${val[0]}`].split(",")[20],
-          });
-        }
-        parsedSensor.push({ id: uuidv4(), name: `${val[0]}`, value: values[`${val[0]}`] });
-      }
-    });
     let encodingKey = "";
     let keyMatch = /.{22}==/gm.exec(clean);
     if (keyMatch) {

@@ -10,10 +10,10 @@ const decodeArr = [
 ];
 
 const chars =
-  ' !#$%&()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~';
+  " !#$%&()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~";
 
 export const firstDec = (sensor: string, bmSzFirstComp: number): string => {
-  let dec = '';
+  let dec = "";
 
   let bmSzFC = bmSzFirstComp;
 
@@ -38,7 +38,7 @@ export const firstDec = (sensor: string, bmSzFirstComp: number): string => {
 };
 
 export const secondDec = (payload: string, bmSzSecondComp: number): string => {
-  const pcs = payload.split(',');
+  const pcs = payload.split(",");
   const mixingIndexes = [];
   let bmSzSC = bmSzSecondComp;
 
@@ -66,5 +66,72 @@ export const secondDec = (payload: string, bmSzSecondComp: number): string => {
     pcs[y] = pc;
   }
 
-  return pcs.join(',');
+  return pcs.join(",");
+};
+
+export const firstDecJSON = (sensor: string, bmSzFirstComp: number): string => {
+  let dec = "";
+
+  let bmSzFC = bmSzFirstComp;
+
+  for (let i = 0; i < sensor.length; i += 1) {
+    let sensorChar = sensor.charAt(i);
+
+    const shifted = (bmSzFC >> 8) & 65535;
+    bmSzFC *= 65793;
+    bmSzFC &= 4294967295;
+    bmSzFC += 4282663;
+    bmSzFC &= 8388607;
+
+    let newIndex = decodeArr[sensor.charCodeAt(i)];
+    if (sensorChar == '"') {
+      dec += sensorChar;
+      continue;
+    }
+
+    let codePoint: any = sensorChar.codePointAt(0);
+    if (codePoint >= 32 && codePoint < 127) {
+      newIndex = decodeArr[codePoint];
+    }
+    newIndex -= shifted % chars.length;
+    if (newIndex < 0) {
+      newIndex += chars.length;
+    }
+    newIndex = newIndex % chars.length;
+    dec += chars[newIndex];
+  }
+
+  return dec;
+};
+
+export const secondDecJson = (payload: string, bmSzSecondComp: number): string => {
+  const pcs = payload.split(":");
+  const mixingIndexes = [];
+  let bmSzSC = bmSzSecondComp;
+
+  for (let i = 0; i < pcs.length; i += 1) {
+    const x = ((bmSzSC >> 8) & 65535) % pcs.length;
+    bmSzSC *= 65793;
+    bmSzSC &= 4294967295;
+    bmSzSC += 4282663;
+    bmSzSC &= 8388607;
+
+    const y = ((bmSzSC >> 8) & 65535) % pcs.length;
+    bmSzSC *= 65793;
+    bmSzSC &= 4294967295;
+    bmSzSC += 4282663;
+    bmSzSC &= 8388607;
+
+    mixingIndexes.push([x, y]);
+  }
+
+  for (let i = mixingIndexes.length - 1; i >= 0; i -= 1) {
+    const [x, y] = mixingIndexes[i];
+
+    const pc = pcs[x];
+    pcs[x] = pcs[y];
+    pcs[y] = pc;
+  }
+
+  return pcs.join(":");
 };
