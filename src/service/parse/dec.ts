@@ -84,7 +84,7 @@ export const firstDecJSON = (sensor: string, bmSzFirstComp: number): string => {
     bmSzFC &= 8388607;
 
     let newIndex = decodeArr[sensor.charCodeAt(i)];
-    if (sensorChar == '"') {
+    if (sensorChar === '"') {
       dec += sensorChar;
       continue;
     }
