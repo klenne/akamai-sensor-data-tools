@@ -80,6 +80,7 @@ export const PayloadCard = (props: PayloadCardProps) => {
             <IconButton
               size="small"
               onClick={() => {
+                // eslint-disable-next-line no-eval
                 eval("console.log('Understanding akamai scripts is so difficult 😭')");
               }}
             >
