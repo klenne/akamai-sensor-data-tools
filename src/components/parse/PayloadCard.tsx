@@ -13,7 +13,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import TreeItem from "@mui/lab/TreeItem";
-
+import Looks3Icon from "@mui/icons-material/Looks3";
+import LooksTwoIcon from "@mui/icons-material/LooksTwo";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { PayloadResponse } from "./PayloadResponse";
 import theme from "../../theme/main-theme";
@@ -76,6 +77,26 @@ export const PayloadCard = (props: PayloadCardProps) => {
                 aria-label="Delete"
               />
             </IconButton>
+            <IconButton
+              size="small"
+              onClick={() => {
+                eval("console.log('Understanding akamai scripts is so difficult 😭')");
+              }}
+            >
+              {props.payload.version === "v3" ? (
+                <Looks3Icon
+                  style={{
+                    color: theme.palette.background.paper,
+                  }}
+                />
+              ) : (
+                <LooksTwoIcon
+                  style={{
+                    color: theme.palette.background.paper,
+                  }}
+                />
+              )}
+            </IconButton>
           </>
         }
       />
@@ -120,7 +141,7 @@ export const PayloadCard = (props: PayloadCardProps) => {
                 }}
               >
                 <Typography variant="body2" style={{ wordBreak: "break-all", cursor: "copy" }}>
-                  {parsed.value.length > 0 && parsed.value !== "\"\"" ? parsed.value : "Empty"}
+                  {parsed.value.length > 0 && parsed.value !== '""' ? parsed.value : "Empty"}
                 </Typography>
               </div>
             </TreeItem>

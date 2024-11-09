@@ -19,6 +19,7 @@ export interface ParsedSensor {
 export interface ParsedSensorResponse {
   sensor: SensorResponse[];
   encodingKey: string;
+  version:string;
 }
 export interface SensorResponse {
   id: string;
@@ -148,7 +149,48 @@ const parseBmSzComps2 = (sensor: string): number[] => {
     .map((n) => Number(n));
 };
 
-export const ParseNewSensor = (sensor: string, detailed: boolean): ParsedSensorResponse => {
+const parseBmSzComps3 = (sensor: string): number[] => {
+  return sensor
+    .slice(1)
+    .split(";")
+    .slice(4, 5)
+    .map((n) => Number(n));
+};
+
+function bruteForceDecode(halfClean: string, bruteStartNumber: number, bruteEndNumber: number) {
+  let start = bruteStartNumber < 0 ? 0 : bruteStartNumber;
+  let end =
+    bruteEndNumber <= 0 || bruteEndNumber <= bruteStartNumber
+      ? Number.MAX_SAFE_INTEGER
+      : bruteEndNumber;
+  let startingBruteForce = new Date().getTime();
+  for (let i = start; i <= end; i++) {
+    try {
+      let clean = secondDecJson(halfClean, i);
+
+      let parsed = JSON.parse(clean);
+      parsed["dynamicReorderingKeyFound"] = i;
+      let endBrute = new Date().getTime();
+      const elapsedTimeMs = endBrute - startingBruteForce;
+
+      const elapsedSeconds = Math.floor(elapsedTimeMs / 1000);
+
+      parsed["bruteForceExecutionTime"] = `${elapsedSeconds} seconds.`;
+      parsed["rawJson"] = clean;
+      return parsed;
+    } catch (error) {}
+  }
+  return null;
+}
+export const ParseNewSensor = async (
+  sensor: string,
+  detailed: boolean,
+  useDynamicReorderingKey: boolean,
+  dynamicReorderingKey: string,
+  useBruteForce: boolean,
+  bruteStartNumber: number,
+  bruteEndNumber: number
+): Promise<ParsedSensorResponse> => {
   try {
     let rawSensor = sensor.toString();
 
@@ -163,21 +205,49 @@ export const ParseNewSensor = (sensor: string, detailed: boolean): ParsedSensorR
       bmSzComps = parseBmSzComps2(rawSensor);
       usingNewFlow = true;
     }
+    if (
+      (isNaN(bmSzComps[0]) || isNaN(bmSzComps[1]) || bmSzComps[0] == 0 || bmSzComps[1] == 0) &&
+      (useDynamicReorderingKey || useBruteForce)
+    ) {
+      bmSzComps = parseBmSzComps3(rawSensor);
+      usingNewFlow = true;
+    }
 
-    const dirty = usingNewFlow
+    let dirty = usingNewFlow
       ? rawSensor.split(";").slice(5).join(";")
       : rawSensor.split(";").slice(4).join(";");
+
+    if (useDynamicReorderingKey || useBruteForce) {
+      dirty = rawSensor.split(";").slice(7).join(";");
+    }
+    if (useDynamicReorderingKey) {
+      bmSzComps.push(Number(dynamicReorderingKey));
+    }
 
     let halfClean;
     let clean = "";
     let parsedSensor = [] as SensorResponse[];
-debugger;
+    let version = "v2";
     if (rawSensor.charAt(0) == "3") {
+      version = "v3";
       halfClean = firstDecJSON(dirty, bmSzComps[0]);
-      clean = secondDecJson(halfClean, bmSzComps[1]);
-      let parsed = JSON.parse(clean);
+      let parsed: any;
+
+      if (useBruteForce) {
+        parsed = bruteForceDecode(halfClean, bruteStartNumber, bruteEndNumber);
+      } else {
+        clean = secondDecJson(halfClean, bmSzComps[1]);
+        parsed = JSON.parse(clean);
+        parsed["dynamicReorderingKey"] = dynamicReorderingKey;
+        parsed["rawJson"] = clean;
+      }
+
       Object.getOwnPropertyNames(parsed).forEach((prop) => {
-        parsedSensor.push({ id: uuidv4(), name: `${prop}`, value: `${JSON.stringify(parsed[prop])}` });
+        parsedSensor.push({
+          id: uuidv4(),
+          name: `${prop}`,
+          value: `${JSON.stringify(parsed[prop])}`,
+        });
       });
     } else {
       const halfClean = firstDec(dirty, bmSzComps[0]);
@@ -224,7 +294,7 @@ debugger;
     if (keyMatch) {
       encodingKey = keyMatch[0];
     }
-    return { encodingKey: encodingKey, sensor: parsedSensor };
+    return { encodingKey: encodingKey, sensor: parsedSensor, version: version };
   } catch (e) {
     throw e;
   }
