@@ -104,7 +104,7 @@ export const firstDecJSON = (sensor: string, bmSzFirstComp: number): string => {
   return dec;
 };
 
-export const secondDecJson = (payload: string, bmSzSecondComp: number): string => {
+export function secondDecJson(payload: string, bmSzSecondComp: number): string {
   const pcs = payload.split(":");
   const mixingIndexes = [];
   let bmSzSC = bmSzSecondComp;
@@ -134,4 +134,4 @@ export const secondDecJson = (payload: string, bmSzSecondComp: number): string =
   }
 
   return pcs.join(":");
-};
+}

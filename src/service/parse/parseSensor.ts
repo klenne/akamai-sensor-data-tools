@@ -19,7 +19,7 @@ export interface ParsedSensor {
 export interface ParsedSensorResponse {
   sensor: SensorResponse[];
   encodingKey: string;
-  version:string;
+  version: string;
 }
 export interface SensorResponse {
   id: string;
@@ -157,40 +157,58 @@ const parseBmSzComps3 = (sensor: string): number[] => {
     .map((n) => Number(n));
 };
 
-function bruteForceDecode(halfClean: string, bruteStartNumber: number, bruteEndNumber: number) {
+function getEncodingKey(clean: string) {
+  let encodingKey = "";
+  let keyMatch = /.{22}==/gm.exec(clean);
+  if (keyMatch) {
+    encodingKey = keyMatch[0];
+  }
+  return encodingKey;
+}
+const workerCode = `
+${secondDecJson};
+function bruteForceDecode(halfClean, bruteStartNumber, bruteEndNumber) {
   let start = bruteStartNumber < 0 ? 0 : bruteStartNumber;
-  let end =
-    bruteEndNumber <= 0 || bruteEndNumber <= bruteStartNumber
-      ? Number.MAX_SAFE_INTEGER
-      : bruteEndNumber;
+  let end = bruteEndNumber <= 0 || bruteEndNumber <= bruteStartNumber ? Number.MAX_SAFE_INTEGER : bruteEndNumber;
   let startingBruteForce = new Date().getTime();
   for (let i = start; i <= end; i++) {
     try {
       let clean = secondDecJson(halfClean, i);
-
       let parsed = JSON.parse(clean);
       parsed["dynamicReorderingKeyFound"] = i;
       let endBrute = new Date().getTime();
       const elapsedTimeMs = endBrute - startingBruteForce;
-
       const elapsedSeconds = Math.floor(elapsedTimeMs / 1000);
-
-      parsed["bruteForceExecutionTime"] = `${elapsedSeconds} seconds.`;
+      parsed["bruteForceExecutionTime"] = elapsedSeconds +'seconds.';
       parsed["rawJson"] = clean;
       return parsed;
     } catch (error) {}
   }
   return null;
-}
-export const ParseNewSensor = async (
+};
+
+    self.onmessage = function(e) {
+      console.log("Starting Job brute force job in worker!");
+      console.time();
+      let data = e.data;
+      let parsed = bruteForceDecode(data.halfClean, data.bruteStartNumber, data.bruteEndNumber);
+      console.log("Brute force job finished!");
+      console.timeEnd();
+      postMessage({ parsed: parsed});
+    };
+`;
+
+export const ParseNewSensor = (
   sensor: string,
   detailed: boolean,
   useDynamicReorderingKey: boolean,
   dynamicReorderingKey: string,
   useBruteForce: boolean,
   bruteStartNumber: number,
-  bruteEndNumber: number
-): Promise<ParsedSensorResponse> => {
+  bruteEndNumber: number,
+  callback: (result: any) => void,
+  onError: () => void
+): void => {
   try {
     let rawSensor = sensor.toString();
 
@@ -228,13 +246,38 @@ export const ParseNewSensor = async (
     let clean = "";
     let parsedSensor = [] as SensorResponse[];
     let version = "v2";
+
     if (rawSensor.charAt(0) == "3") {
       version = "v3";
       halfClean = firstDecJSON(dirty, bmSzComps[0]);
       let parsed: any;
 
       if (useBruteForce) {
-        parsed = bruteForceDecode(halfClean, bruteStartNumber, bruteEndNumber);
+        const blob = new Blob([workerCode], { type: "application/javascript" });
+
+        const worker = new Worker(URL.createObjectURL(blob));
+
+        worker.onmessage = function (e) {
+          worker.terminate();
+          console.log("Worker Result:", e.data);
+          Object.getOwnPropertyNames(e.data.parsed).forEach((prop) => {
+            parsedSensor.push({
+              id: uuidv4(),
+              name: `${prop}`,
+              value: `${JSON.stringify(e.data.parsed[prop])}`,
+            });
+          });
+       
+          callback({ sensor: parsedSensor, version: "v3" });
+        
+        };
+        worker.postMessage({
+          halfClean: halfClean,
+          bruteStartNumber: bruteStartNumber,
+          bruteEndNumber: bruteEndNumber,
+        });
+       
+        return;
       } else {
         clean = secondDecJson(halfClean, bmSzComps[1]);
         parsed = JSON.parse(clean);
@@ -289,14 +332,10 @@ export const ParseNewSensor = async (
       });
     }
 
-    let encodingKey = "";
-    let keyMatch = /.{22}==/gm.exec(clean);
-    if (keyMatch) {
-      encodingKey = keyMatch[0];
-    }
-    return { encodingKey: encodingKey, sensor: parsedSensor, version: version };
+    callback({ encodingKey: getEncodingKey(clean), sensor: parsedSensor, version: version });
   } catch (e) {
-    throw e;
+    console.log("Error :(", e);
+    onError();
   }
 };
 

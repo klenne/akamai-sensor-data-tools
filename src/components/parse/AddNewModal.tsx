@@ -12,7 +12,7 @@ import { PayloadResponse } from "./PayloadResponse";
 import { v4 as uuid } from "uuid";
 import theme from "../../theme/main-theme";
 import Switch from "@mui/material/Switch";
-import { Backdrop, FormControlLabel, Grid, Typography } from "@mui/material";
+import { Backdrop, CircularProgress, FormControlLabel, Grid, Typography } from "@mui/material";
 
 interface AddNewModalProps {
   state: boolean;
@@ -40,10 +40,6 @@ export default function AddNewModal(props: AddNewModalProps) {
     onSubmit: (values: any) => {
       if (useBruteForce) {
         setLoading(true);
-        requestIdleCallback(async () => {
-          asyncTask(values);
-        });
-        return;
       }
 
       ParseNewSensor(
@@ -53,51 +49,29 @@ export default function AddNewModal(props: AddNewModalProps) {
         values.dynamicReorderingKey,
         useBruteForce,
         values.bruteStartNumber,
-        values.bruteEndNumber
-      )
-        .then((parsedSensor) => {
-          props.onSuccess({
-            id: uuid(),
-            identifier: values.identifier,
-            encodingKey: parsedSensor.encodingKey,
-            parsed: parsedSensor.sensor,
-            date: new Date(),
-            version: parsedSensor.version,
-          });
-          setLoading(false);
-          handleClose();
-        })
-        .catch(() => {
-          setLoading(false);
-          formik.setErrors({ payload: "Payload is invalid" });
-        });
+        values.bruteEndNumber,
+        onSuccess,
+        onError
+      );
     },
   });
-  const asyncTask = async (values: any) => {
-    try {
-      let parsedSensor = await ParseNewSensor(
-        values.payload,
-        true,
-        useDynamicReorderingKey,
-        values.dynamicReorderingKey,
-        useBruteForce,
-        values.bruteStartNumber,
-        values.bruteEndNumber
-      );
-      props.onSuccess({
-        id: uuid(),
-        identifier: values.identifier,
-        encodingKey: parsedSensor.encodingKey,
-        parsed: parsedSensor.sensor,
-        date: new Date(),
-        version: parsedSensor.version,
-      });
-      setLoading(false);
-      handleClose();
-    } catch {
-      setLoading(false);
-      formik.setErrors({ payload: "Payload is invalid" });
-    }
+
+  const onSuccess = (parsedSensor: any) => {
+    props.onSuccess({
+      id: uuid(),
+      identifier: formik.values.identifier,
+      encodingKey: parsedSensor.encodingKey,
+      parsed: parsedSensor.sensor,
+      date: new Date(),
+      version: parsedSensor.version,
+    });
+    setLoading(false);
+    handleClose();
+  };
+
+  const onError = () => {
+    setLoading(false);
+    formik.setErrors({ payload: "Payload is invalid" });
   };
 
   const handleClose = () => {
@@ -109,8 +83,9 @@ export default function AddNewModal(props: AddNewModalProps) {
 
   return (
     <>
-      <Backdrop sx={() => ({ color: "#fff", zIndex: 999999999999999 })} open={showLoading}>
-        <Typography variant="h1">Please wait while brute Force is running...</Typography>
+      <Backdrop sx={() => ({ color: "#fff", zIndex: 999999999999999,background:"rgba(0, 0, 0, 1)" , display:"flex", flexDirection:"column"})} open={showLoading}>
+        <Typography variant="h1">Please wait while brute Force is running</Typography>
+        <CircularProgress style={{marginTop:10}} color="inherit" />
       </Backdrop>
       <Dialog
         open={props.state}
