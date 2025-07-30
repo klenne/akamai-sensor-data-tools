@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import theme from "./theme/main-theme";
 import makeStyles from "@mui/styles/makeStyles";
 import { MainAppBar, MainDrawer, MainFooter } from "./components";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { MainPage, DeobfuscatePage, ParsePayloadPage } from "./pages";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import {  DeobfuscatePage, ParsePayloadPage } from "./pages";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Theme } from "@mui/material/styles";
@@ -34,12 +34,11 @@ function App() {
         <div style={{ flex: 1, width: "100%" }}>
           <MainDrawer state={drawerState} setDrawerState={setDrawerState} />
           <MainAppBar state={drawerState} setDrawerState={setDrawerState} />
-          <Routes>
-            <Route path="/" element={<MainPage />} />
-            <Route path="/payload-info" element={<h1>Building...</h1>} />
+            <Routes>
+            <Route path="/" element={<Navigate to="/parse-payload" replace />} />
             <Route path="/parse-payload" element={<ParsePayloadPage />} />
             <Route path="/deobfuscate-script" element={<DeobfuscatePage />} />
-          </Routes>
+            </Routes>
         </div>
         <ToastContainer
           position="bottom-right"
