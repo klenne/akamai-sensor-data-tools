@@ -1,7 +1,7 @@
 # Sensor Data Tools
 This Application can parse akamai sensor data payloads, and deobfuscate most of the script
 
-www.abck.tools
+https://sensor-data-tools.netlify.app/
 
 **for study only**
 
